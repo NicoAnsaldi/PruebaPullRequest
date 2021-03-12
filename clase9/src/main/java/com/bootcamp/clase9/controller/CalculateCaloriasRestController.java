@@ -1,8 +1,8 @@
 package com.bootcamp.clase9.controller;
 
 import com.bootcamp.clase9.dto.ErrorDTO;
-import com.bootcamp.clase9.dto.PlatoResponseDTO;
-import com.bootcamp.clase9.dto.PlatoDTO;
+import com.bootcamp.clase9.dto.PlateResponseDTO;
+import com.bootcamp.clase9.dto.PlateDTO;
 import com.bootcamp.clase9.exception.IngredienteNotFound;
 import com.bootcamp.clase9.service.ICalculateCaloriaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +22,12 @@ public class CalculateCaloriasRestController {
     private ICalculateCaloriaService service;
 
     @PostMapping(path = "/calorias")
-    public PlatoResponseDTO calculateCalories(@RequestBody PlatoDTO plate) {
+    public PlateResponseDTO calculateCalories(@RequestBody PlateDTO plate) {
         return service.calculateCalories(plate);
     }
 
     @PostMapping(path = "/platos")
-    public List<PlatoResponseDTO> calculatePlate(@RequestBody List<PlatoDTO> plate){
+    public List<PlateResponseDTO> calculatePlate(@RequestBody List<PlateDTO> plate){
         return service.calculateCaloriesXPlate(plate);
     }
 

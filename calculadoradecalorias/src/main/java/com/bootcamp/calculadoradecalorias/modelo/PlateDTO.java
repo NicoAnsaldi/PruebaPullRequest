@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 
 @Getter @Setter
-public class PlatoDTO {
-    String nombre;
-    ArrayList<IngredienteEntradaDTO> ingredientes;
+public class PlateDTO {
+    String name;
+    ArrayList<IngredientsEntryDTO> ingredients;
 }

@@ -1,7 +1,6 @@
 package com.bootcamp.calculadoradecalorias.repositories;
 
-import com.bootcamp.calculadoradecalorias.modelo.CaloriasDTO;
-import com.bootcamp.calculadoradecalorias.repositories.IRepositorioCalorias;
+import com.bootcamp.calculadoradecalorias.modelo.CaloriesDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Repository;
@@ -14,20 +13,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class RepositorioCaloriasImpl implements IRepositorioCalorias {
+public class CaloriesRepositoryImpl implements ICaloriesRepository {
     @Override
-    public Optional<CaloriasDTO> encontrarCaloriasPorNombre(String nombre) {
-        List<CaloriasDTO> caloriasDTOS = null;
-        caloriasDTOS = loadDataBase();
-        Optional<CaloriasDTO> item = null;
-        if(caloriasDTOS != null){
-            item = caloriasDTOS.stream().filter(caloriasDTO -> caloriasDTO.getName().equals(nombre))
+    public Optional<CaloriesDTO> findCaloriesPropertyByName(String name) {
+        List<CaloriesDTO> caloriesDTOS = null;
+        caloriesDTOS = loadDataBase();
+        Optional<CaloriesDTO> item = null;
+        if(caloriesDTOS != null){
+            item = caloriesDTOS.stream().filter(caloriasDTO -> caloriasDTO.getName().equals(name))
                     .findFirst();
         }
         return item;
     }
 
-    private List<CaloriasDTO> loadDataBase(){
+    private List<CaloriesDTO> loadDataBase(){
         File file = null;
         try{
             file = ResourceUtils.getFile("classpath:food.json");
@@ -35,8 +34,8 @@ public class RepositorioCaloriasImpl implements IRepositorioCalorias {
             e.printStackTrace();
         }
         ObjectMapper objectMapper = new ObjectMapper();
-        TypeReference<List<CaloriasDTO>> typeRef = new TypeReference<List<CaloriasDTO>>() {};
-        List<CaloriasDTO> caloriasDTOS = null;
+        TypeReference<List<CaloriesDTO>> typeRef = new TypeReference<List<CaloriesDTO>>() {};
+        List<CaloriesDTO> caloriasDTOS = null;
         try{
             caloriasDTOS = objectMapper.readValue(file, typeRef);
         }catch (IOException e){

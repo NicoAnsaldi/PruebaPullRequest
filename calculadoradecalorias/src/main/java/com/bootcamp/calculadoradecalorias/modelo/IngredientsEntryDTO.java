@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class IngredienteEntradaDTO {
-    String nombre;
-    int peso;
+public class IngredientsEntryDTO {
+    String name;
+    int weight;
 }

@@ -2,7 +2,7 @@ package com.bootcamp.calculadoradecalorias.servicies;
 
 import com.bootcamp.calculadoradecalorias.exceptions.IngredientNotFound;
 import com.bootcamp.calculadoradecalorias.modelo.*;
-import com.bootcamp.calculadoradecalorias.repositories.IRepositorioCalorias;
+import com.bootcamp.calculadoradecalorias.repositories.ICaloriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,65 +11,65 @@ import java.util.*;
 @Service
 public class CalculateService implements ICalculateService {
     @Autowired
-    private IRepositorioCalorias repositorioCalorias;
+    private ICaloriesRepository caloriesRepository;
 
-    private double calcularCaloriasDeIngrediente(double cantidad, String nombre){
-        Optional<CaloriasDTO> caloriasPorNombre = repositorioCalorias.encontrarCaloriasPorNombre(nombre);
-        double calorias = -1.0;
-        if(caloriasPorNombre.isPresent()){
-            calorias = caloriasPorNombre.get().getCalories();
+    private double calcularCaloriasDeIngrediente(double quantity, String name){
+        Optional<CaloriesDTO> caloriesByName = caloriesRepository.findCaloriesPropertyByName(name);
+        double calories = -1.0;
+        if(caloriesByName.isPresent()){
+            calories = caloriesByName.get().getCalories();
         }else{
-            throw new IngredientNotFound(nombre);
+            throw new IngredientNotFound(name);
         }
-        return calorias*(cantidad/100);
+        return calories*(quantity/100);
     }
 
-    private double calcularCaloriasPlato(List<IngredienteEntradaDTO> ingredientes){
+    private double calcularCaloriasPlato(List<IngredientsEntryDTO> ingredients){
         double result=0.0;
-        for(IngredienteEntradaDTO in:ingredientes){
-            result += calcularCaloriasDeIngrediente(in.getPeso(),in.getNombre());
+        for(IngredientsEntryDTO in:ingredients){
+            result += calcularCaloriasDeIngrediente(in.getWeight(),in.getName());
         }
         return result;
     }
 
-    private IngredienteRespuestaDTO ingredienteMasCalorico(List<IngredienteEntradaDTO> ingredientes){
-        IngredienteRespuestaDTO ingredienteMasCalorico = new IngredienteRespuestaDTO();
-        ingredienteMasCalorico.setCalorias(0.0);
-        for(IngredienteEntradaDTO in:ingredientes){
-            double auxCalorias = calcularCaloriasDeIngrediente(in.getPeso(), in.getNombre());
-            if(ingredienteMasCalorico.getCalorias() < auxCalorias){
-                ingredienteMasCalorico.setCalorias(auxCalorias);
-                ingredienteMasCalorico.setNombre(in.getNombre());
+    private ingredientsResponseDTO ingredienteMasCalorico(List<IngredientsEntryDTO> ingredients){
+        ingredientsResponseDTO moreCaloricIngredient = new ingredientsResponseDTO();
+        moreCaloricIngredient.setCalories(0.0);
+        for(IngredientsEntryDTO in:ingredients){
+            double auxCalories = calcularCaloriasDeIngrediente(in.getWeight(), in.getName());
+            if(moreCaloricIngredient.getCalories() < auxCalories){
+                moreCaloricIngredient.setCalories(auxCalories);
+                moreCaloricIngredient.setName(in.getName());
             }
         }
-        return ingredienteMasCalorico;
+        return moreCaloricIngredient;
     }
 
-    private ArrayList<IngredienteRespuestaDTO> caloriasPorIngredientes(List<IngredienteEntradaDTO> ingrediente){
-        ArrayList<IngredienteRespuestaDTO> result = new ArrayList<>();
-        for(IngredienteEntradaDTO in:ingrediente){
-            IngredienteRespuestaDTO aux = new IngredienteRespuestaDTO();
-            aux.setNombre(in.getNombre());
-            aux.setCalorias(calcularCaloriasDeIngrediente(in.getPeso(),in.getNombre()));
+    private ArrayList<ingredientsResponseDTO> caloriasPorIngredientes(List<IngredientsEntryDTO> ingredients){
+        ArrayList<ingredientsResponseDTO> result = new ArrayList<>();
+        for(IngredientsEntryDTO in:ingredients){
+            ingredientsResponseDTO aux = new ingredientsResponseDTO();
+            aux.setName(in.getName());
+            aux.setCalories(calcularCaloriasDeIngrediente(in.getWeight(),in.getName()));
             result.add(aux);
         }
         return result;
     }
 
     @Override
-    public InformacionNutricionalPlatoDTO calculate(PlatoDTO platoDTO) {
-        InformacionNutricionalPlatoDTO informacionNutricional = new InformacionNutricionalPlatoDTO();
-        informacionNutricional.setCaloriasTotales(calcularCaloriasPlato(platoDTO.getIngredientes()));
-        informacionNutricional.setIngredientes(caloriasPorIngredientes(platoDTO.getIngredientes()));
-        informacionNutricional.setIngredienteMasCalorico(ingredienteMasCalorico(platoDTO.getIngredientes()));
+    public PlatesNutritialInformationDTO calculate(PlateDTO plateDTO) {
+        PlatesNutritialInformationDTO nutricialInformation = new PlatesNutritialInformationDTO();
+        nutricialInformation.setTotalCalories(calcularCaloriasPlato(plateDTO.getIngredients()));
+        nutricialInformation.setIngredients(caloriasPorIngredientes(plateDTO.getIngredients()));
+        nutricialInformation.setIngredientMoreCaloric(ingredienteMasCalorico(plateDTO.getIngredients()));
 
-        return informacionNutricional;
+        return nutricialInformation;
     }
 
     @Override
-    public ArrayList<InformacionNutricionalPlatoDTO> calculateList(PlatosDTO platoDTO) {
-        ArrayList<InformacionNutricionalPlatoDTO> result = new ArrayList<>();
-        for(PlatoDTO p:platoDTO.getPlatos()){
+    public ArrayList<PlatesNutritialInformationDTO> calculateList(ListOfPlatesDTO platoDTO) {
+        ArrayList<PlatesNutritialInformationDTO> result = new ArrayList<>();
+        for(PlateDTO p:platoDTO.getPlates()){
             result.add(calculate(p));
         }
         return result;

@@ -1,13 +1,12 @@
 package com.bootcamp.calculadoradecalorias.servicies;
 
-import com.bootcamp.calculadoradecalorias.modelo.InformacionNutricionalPlatoDTO;
-import com.bootcamp.calculadoradecalorias.modelo.PlatoDTO;
-import com.bootcamp.calculadoradecalorias.modelo.PlatosDTO;
+import com.bootcamp.calculadoradecalorias.modelo.PlatesNutritialInformationDTO;
+import com.bootcamp.calculadoradecalorias.modelo.PlateDTO;
+import com.bootcamp.calculadoradecalorias.modelo.ListOfPlatesDTO;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public interface ICalculateService {
-    InformacionNutricionalPlatoDTO calculate(PlatoDTO platoDTO);
-    ArrayList<InformacionNutricionalPlatoDTO> calculateList(PlatosDTO platoDTO);
+    PlatesNutritialInformationDTO calculate(PlateDTO platoDTO);
+    ArrayList<PlatesNutritialInformationDTO> calculateList(ListOfPlatesDTO platoDTO);
 }

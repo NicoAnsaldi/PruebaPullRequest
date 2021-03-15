@@ -5,9 +5,9 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter @Setter
-public class PlatoDTO {
+public class PlateDTO {
 
-    private String nombre;
-    private List<IngredienteDTO> ingredientes;
+    private String name;
+    private List<IngredientDTO> ingredients;
 
 }

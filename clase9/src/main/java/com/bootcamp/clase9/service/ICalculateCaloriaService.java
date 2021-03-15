@@ -1,14 +1,13 @@
 package com.bootcamp.clase9.service;
 
-import com.bootcamp.clase9.dto.PlatoResponseDTO;
-import com.bootcamp.clase9.dto.PlatoDTO;
-import com.bootcamp.clase9.exception.IngredienteNotFound;
+import com.bootcamp.clase9.dto.PlateResponseDTO;
+import com.bootcamp.clase9.dto.PlateDTO;
 
 import java.util.List;
 
 public interface ICalculateCaloriaService {
 
-    PlatoResponseDTO calculateCalories(PlatoDTO plate);
-    List<PlatoResponseDTO> calculateCaloriesXPlate(List<PlatoDTO> plate);
+    PlateResponseDTO calculateCalories(PlateDTO plate);
+    List<PlateResponseDTO> calculateCaloriesXPlate(List<PlateDTO> plate);
 
 }

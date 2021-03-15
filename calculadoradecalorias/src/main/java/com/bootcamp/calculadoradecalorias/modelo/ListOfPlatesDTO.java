@@ -6,6 +6,6 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter @Setter
-public class ListOfPlatesDTO {
+public class PlateListDTO {
     List<PlateDTO> plates;
 }
